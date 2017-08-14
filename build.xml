@@ -1,42 +1,25 @@
-<?xml version="1.0" ?>
-<project name="Hello World" default="compress">
- 
-    <target name="compile" depends="init">
-        <echo>Starting the compilation process</echo>
-        <javac srcdir="src" destdir="build/classes" source="1.5" target="1.5"/>
-        <echo>Compilation Completed Successfully !</echo>
-    </target>
- 
-    <move todir="build/classes/">
-        <fileset dir="src">
-            <include name="**/*.class"/>
-            <exclude name="**/*.java"/>
-        </fileset>
-    </move>
- 
-    <target name="init">
-        <mkdir dir="build/classes" />
-        <mkdir dir="dist" />
-    </target>
- 
- 
-    <target name="compress"  depends="compile">
-        <jar destfile="dist/HelloWorld.jar" basedir="build/classes" >
-            <manifest>
-                <attribute name="Created-By" value="Diaa Kasem"/>
-                <attribute name="Main-Class" value="HelloWorld"/>
-                </manifest>
-        </jar>
-        <echo>Building .jar file completed successfully!</echo>
-    </target>
- 
-    <target name="execute" depends="compile">
-        <java classname="dino.HelloWorld" classpath="build/classes" />
-    </target>
- 
+<project>
+
     <target name="clean">
-        <delete dir="build" />
-        <delete dir="dist" />
+        <delete dir="build"/>
     </target>
- 
+
+    <target name="compile">
+        <mkdir dir="build/classes"/>
+        <javac srcdir="src" destdir="build/classes"/>
+    </target>
+
+    <target name="jar">
+        <mkdir dir="build/jar"/>
+        <jar destfile="build/jar/HelloWorld.jar" basedir="build/classes">
+            <manifest>
+                <attribute name="Main-Class" value="oata.HelloWorld"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run">
+        <java jar="build/jar/HelloWorld.jar" fork="true"/>
+    </target>
+
 </project>
