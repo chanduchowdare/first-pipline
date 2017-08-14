@@ -1,39 +1,42 @@
-<project name="HelloWorld" basedir="." default="main">
-
-    <property name="src.dir"     value="src"/>
-
-    <property name="build.dir"   value="build"/>
-    <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="jar.dir"     value="${build.dir}/jar"/>
-
-    <property name="main-class"  value="oata.HelloWorld"/>
-
-
-
-    <target name="clean">
-        <delete dir="${build.dir}"/>
+<?xml version="1.0" ?>
+<project name="Hello World" default="compress">
+ 
+    <target name="compile" depends="init">
+        <echo>Starting the compilation process</echo>
+        <javac srcdir="src" destdir="build/classes" source="1.5" target="1.5"/>
+        <echo>Compilation Completed Successfully !</echo>
     </target>
-
-    <target name="compile">
-        <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}"/>
+ 
+    <move todir="build/classes/">
+        <fileset dir="src">
+            <include name="**/*.class"/>
+            <exclude name="**/*.java"/>
+        </fileset>
+    </move>
+ 
+    <target name="init">
+        <mkdir dir="build/classes" />
+        <mkdir dir="dist" />
     </target>
-
-    <target name="jar" depends="compile">
-        <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+ 
+ 
+    <target name="compress"  depends="compile">
+        <jar destfile="dist/HelloWorld.jar" basedir="build/classes" >
             <manifest>
-                <attribute name="Main-Class" value="${main-class}"/>
-            </manifest>
+                <attribute name="Created-By" value="Diaa Kasem"/>
+                <attribute name="Main-Class" value="HelloWorld"/>
+                </manifest>
         </jar>
+        <echo>Building .jar file completed successfully!</echo>
     </target>
-
-    <target name="run" depends="jar">
-        <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
+ 
+    <target name="execute" depends="compile">
+        <java classname="dino.HelloWorld" classpath="build/classes" />
     </target>
-
-    <target name="clean-build" depends="clean,jar"/>
-
-    <target name="main" depends="clean,run"/>
-
+ 
+    <target name="clean">
+        <delete dir="build" />
+        <delete dir="dist" />
+    </target>
+ 
 </project>
